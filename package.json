@@ -1,0 +1,25 @@
+{
+  "name": "api-back-express",
+  "version": "1.0.0",
+  "description": "node ,express",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon index.js"
+   
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HEVERHD/api-back-express.git"
+  },
+  "keywords": [],
+  "author": "Hevert Gelis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HEVERHD/api-back-express/issues"
+  },
+  "homepage": "https://github.com/HEVERHD/api-back-express#readme",
+  "dependencies": {
+    "express": "^4.18.0",
+    "nodemon": "^2.0.16"
+  }
+}
