@@ -3,7 +3,44 @@ const sequelize = require('../db');
 const {Product, User} = sequelize.models;
 const { verifyEmployedToken } = require('../utils/verifyToken')
 
-router.post('/', verifyEmployedToken, async (req, res)=>{
+
+//TRAER TODOS LOS PRODUCTOS
+router.get("/", async (req, res) => {
+    const result = await Product.findAll({
+    }) .then(res => res.map(item => {
+      let producto = item.dataValues
+      return {
+        ...producto,
+      }
+    }))
+    res.json(result);
+  });
+
+  //ELIMINAR PRODUCTO
+
+  router.delete('/:sku', async (req, res)=>{
+    const {sku} = req.params
+    try{
+        const product = await Product.findOne({
+            where:{
+                sku
+            }
+        });
+
+        statusCode = 404
+        if(!product) return res.status(400).json({error :'No product matches given SKU'})
+
+        await product.destroy( ) 
+        return res.status(200).json({success:`Product '${product.title}' was deleted`})
+    }
+    catch(err){ 
+        return res.status(statusCode).json({error:err.message}) 
+    }
+})
+  
+
+//CREAR UN PRODUCTO
+router.post('/',  async (req, res)=>{
     const {title, description, price, stock, ownerId} = req.body;
     try{
         if(!title || !description || !price || !stock || !ownerId) throw new Error('The necesary data was not send');

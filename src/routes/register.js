@@ -2,6 +2,22 @@ const router = require('express').Router();
 const sequelize = require('../db');
 const { User } = sequelize.models;
 
+
+router.get("/", async (req, res) => {
+    const result = await User.findAll({
+    }) .then(res => res.map(item => {
+      let id = item.dataValues
+      return {
+        ...id,
+      }
+    }))
+    res.json(result);
+  });
+
+
+
+
+
 router.post('/', async (req, res)=>{
     const { username, password, email } = req.body;
 
@@ -19,6 +35,7 @@ router.post('/', async (req, res)=>{
         const newUser = await User.create({...req.body});
         res.status(201).json({success : 'User create successfuly', user : newUser});
     } catch(error){
+        console.log(error);
         res.status(400).json({error: error.message});
     }
 });
