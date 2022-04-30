@@ -13,15 +13,18 @@ router.post('/', async (req, res)=>{
         const result = await User.findOne({
             where:{
                 username,
-                password
+                password,
+    
             }
         });
 
         if(!result) throw new Error('User not found');
+        if(result.disable) throw new Error('User is banned');
+    
 
         //Generamos el token de acceso
         const accessToken = jwt.sign({
-            role: result.isAdmin ? 'Admin' : 'Employed'  
+            role: result.isAdmin ? 'Admin' : 'Client',
         },JWT_KEY,{
             expiresIn : 60 * 60 * 1
         });
