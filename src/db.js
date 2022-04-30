@@ -5,7 +5,17 @@ const path = require('path');
 const { DATABASE_URL } = process.env;
 
 //Conectamos a la db
-const sequelize = new Sequelize(DATABASE_URL, { logging: false });
+const sequelize = new Sequelize(DATABASE_URL, {
+	logging: false,
+	native: false,
+	// Config para Heroku
+	dialectOptions: {
+		ssl: {
+			require: true,
+			rejectUnauthorized: false,
+		},
+	},
+});
 
 //Iyectamos todos los modelos de la carpeta models
 const basename = path.basename(__filename);
