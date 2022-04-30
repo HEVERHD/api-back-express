@@ -37,7 +37,49 @@ router.get("/", async (req, res) => {
         return res.status(statusCode).json({error:err.message}) 
     }
 })
+
+//TREA UN PRODUCTO POR SKU
+
+router.get("/:sku", async (req, res) => {
+    const { sku } = req.params;
+    try {
+      const product = await Product.findOne({
+        where: {
+          sku,
+        },
+      });
   
+      if (!product) return res.status(400).json({ error: "Product not found" });
+      return res.json(product);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  });
+
+
+  //EDITAR PRODUCTO
+    router.put('/:sku', async (req, res)=>{
+        const {sku} = req.params
+        const {title, description, price, stock} = req.body
+        try{
+            const product = await Product.findOne({
+                where:{
+                    sku
+                }
+            });
+
+            statusCode = 404
+            if(!product) return res.status(400).json({error :'No product matches given SKU'})
+
+            await product.update({...req.body}) 
+            return res.status(200).json({success:`Product '${product.title}' was updated`})
+        }
+        catch(err){ 
+            return res.status(statusCode).json({error:err.message}) 
+        }
+    })
+
+    
 
 //CREAR UN PRODUCTO
 router.post('/',  async (req, res)=>{
@@ -60,5 +102,7 @@ router.post('/',  async (req, res)=>{
         res.status(400).json({error : error.message});
     }
 });
+
+
 
 module.exports = router;
